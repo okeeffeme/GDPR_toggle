@@ -10,8 +10,24 @@ let objA = {
   ]
 }
 
-function makePrivacyA(a) {
-  let objCopy = JSON.parse(JSON.stringify(a));
+function filterDups(arr){
+    let uniqueArray = arr.filter(function(elem, index, self) {
+        return index == self.indexOf(elem);
+    });
+    return uniqueArray
+}
+
+function arrToObj(arr){
+  let obj = {};
+  let value = false;
+  for (let i = 0; i < arr.length; i++) {
+    obj[arr[i]] = value;
+  }
+  return obj;
+}
+
+function makeDataListA(obj) {
+  let objCopy = JSON.parse(JSON.stringify(obj));
   let b = [];
   for (let i = 0; i < Object.keys(objCopy).length; i++) {
     let key = Object.keys(objCopy)[i];
@@ -19,16 +35,19 @@ function makePrivacyA(a) {
       b.push(objCopy[key][z]);
     }
   }
-  // console.log(b);
+  b = filterDups(b);
+  b = arrToObj(b);
   console.log(b);
-  return objCopy;
+  return b;
 }
 
-function makePrivacyB(a) {
-  let objCopy = JSON.parse(JSON.stringify(a));
+function makeDataListB(obj) {
+  let objCopy = JSON.parse(JSON.stringify(obj));
   let c = [].concat.apply([], Object.values(objCopy));
+  c = filterDups(c);
+  c = arrToObj(c);
   console.log(c);
-  return objCopy;
+  return c;
 }
 
-makePrivacyA(objA);
+makeDataListA(objA);

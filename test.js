@@ -1,4 +1,4 @@
-let ObjA = {
+const ObjA = {
   adA: [
     "a", "b", "c"
   ],
@@ -10,12 +10,21 @@ let ObjA = {
   ]
 }
 
-let Usecases = makeUsecasesList(ObjA);
-let Permissions = makePermissionsList(ObjA);
+
+function logginator(func, name) {
+  name = name || 'a function';
+  return function(...args) {
+    console.log(name + ' called');
+    return func(...args);
+  };
+};
 
 function copyObj(obj){
   return JSON.parse(JSON.stringify(obj));
 }
+
+// copyObj = logginator(copyObj, 'copyObj');
+
 
 function filterDups(arr){
     let uniqueArray = arr.filter(function(elem, index, self) {
@@ -23,6 +32,8 @@ function filterDups(arr){
     });
     return uniqueArray
 }
+
+// filterDups = logginator(filterDups, 'filterDups');
 
 function arrToObj(arr){
   let obj = {};
@@ -32,6 +43,8 @@ function arrToObj(arr){
   }
   return obj;
 }
+
+// arrToObj = logginator(arrToObj, 'arrToObj');
 
 // function makeDataListA(obj) {
 //   let objCopy = copyObj(obj);
@@ -73,5 +86,9 @@ function test() {
   console.log(Usecases);
   return;
 }
+
+
+let Usecases = makeUsecasesList(ObjA);
+let Permissions = makePermissionsList(ObjA);
 
 test();

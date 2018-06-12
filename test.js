@@ -1,13 +1,20 @@
-let objA = {
-  testA: [
+let ObjA = {
+  adA: [
     "a", "b", "c"
   ],
-  testB: [
+  adB: [
     "b", "c"
   ],
-  testC: [
+  adC: [
     "c"
   ]
+}
+
+let Usecases = makeUsecasesList(ObjA);
+let Permissions = makePermissionsList(ObjA);
+
+function copyObj(obj){
+  return JSON.parse(JSON.stringify(obj));
 }
 
 function filterDups(arr){
@@ -26,28 +33,45 @@ function arrToObj(arr){
   return obj;
 }
 
-function makeDataListA(obj) {
-  let objCopy = JSON.parse(JSON.stringify(obj));
-  let b = [];
+// function makeDataListA(obj) {
+//   let objCopy = copyObj(obj);
+//   let b = [];
+//   for (let i = 0; i < Object.keys(objCopy).length; i++) {
+//     let key = Object.keys(objCopy)[i];
+//     for (let z = 0; z < objCopy[key].length; z++) {
+//       b.push(objCopy[key][z]);
+//     }
+//   }
+//   b = filterDups(b);
+//   b = arrToObj(b);
+//   console.log(b);
+//   return b;
+// }
+
+function makePermissionsList(obj) {
+  let objCopy = copyObj(obj);
+  objCopy = [].concat.apply([], Object.values(objCopy));
+  objCopy = filterDups(objCopy);
+  objCopy = arrToObj(objCopy);
+  return objCopy;
+}
+
+function makeUsecasesList(obj) {
+  let objCopy = copyObj(obj);
   for (let i = 0; i < Object.keys(objCopy).length; i++) {
     let key = Object.keys(objCopy)[i];
-    for (let z = 0; z < objCopy[key].length; z++) {
-      b.push(objCopy[key][z]);
-    }
+    let values = Object.values(objCopy[key]);
+    // values = values.push(false);
+    objCopy[key] = new Set(values);
+    objCopy[key].add(false);
   }
-  b = filterDups(b);
-  b = arrToObj(b);
-  console.log(b);
-  return b;
+  return objCopy;
 }
 
-function makeDataListB(obj) {
-  let objCopy = JSON.parse(JSON.stringify(obj));
-  let c = [].concat.apply([], Object.values(objCopy));
-  c = filterDups(c);
-  c = arrToObj(c);
-  console.log(c);
-  return c;
+function test() {
+  console.log(Permissions);
+  console.log(Usecases);
+  return;
 }
 
-makeDataListA(objA);
+test();

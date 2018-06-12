@@ -23,8 +23,13 @@ function copyObj(obj){
   return JSON.parse(JSON.stringify(obj));
 }
 
-// copyObj = logginator(copyObj, 'copyObj');
+function getKey(i, obj) {
+  return Object.keys(obj)[i];
+}
 
+function getValue(i, obj){
+  return obj[getKey(i, obj)];
+}
 
 function filterDups(arr){
     let uniqueArray = arr.filter(function(elem, index, self) {
@@ -74,21 +79,53 @@ function makeUsecasesList(obj) {
   for (let i = 0; i < Object.keys(objCopy).length; i++) {
     let key = Object.keys(objCopy)[i];
     let values = Object.values(objCopy[key]);
-    // values = values.push(false);
     objCopy[key] = new Set(values);
     objCopy[key].add(false);
   }
   return objCopy;
 }
 
+function checkDependency(dependency, usecase) {
+  let status = false;
+  if (usecase.has(dependency)) {
+    status = true;
+  }
+  return status;
+}
+
+function checkUsecases(dependency, usecases) {
+  let status = false;
+  let caseList = [] || undefined;
+  for (let i = 0; i < Object.keys(usecases).length; i++) {
+    if (checkDependency(dependency, getValue(i, usecases))) {
+      status = true;
+      caseList.push(getKey(i, usecases));
+    }
+  }
+  return [status, caseList];
+}
+
+let Usecases = makeUsecasesList(ObjA);
+let Permissions = makePermissionsList(ObjA);
+
+function toggle(status, arr) {
+  if (status) {
+    for (i = 0; i < arr.length; i++) {
+      let currentSet = Usecases[arr[i]];
+      currentSet.delete(false);
+      currentSet.add(true);
+    }
+  }
+  return 'run toggle';
+}
+
 function test() {
-  console.log(Permissions);
+  // console.log(Permissions);
+  console.log(Usecases);
+  console.log(toggle(...checkUsecases("b", Usecases)));
   console.log(Usecases);
   return;
 }
 
 
-let Usecases = makeUsecasesList(ObjA);
-let Permissions = makePermissionsList(ObjA);
-
-test();
+test('end');

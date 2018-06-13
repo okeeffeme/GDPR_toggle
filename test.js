@@ -89,12 +89,14 @@ function getUsecases(permission, usecases) {
   return caseList;
 }
 
-function toggleUsecase(caseList) {
+function toggleUsecase(caseList, status) {
+  status = status || false;
+  console.log('usecase status is ' + status);
   for (i = 0; i < caseList.length; i++) {
     let currentSet = Usecases[caseList[i]];
-    if (currentSet.has(true)) {
-      currentSet.delete(true);
-      currentSet.add(false);
+    if (currentSet.has(!status)) {
+      currentSet.delete(!status);
+      currentSet.add(status);
     }
   }
   return 'run Usecases toggle';
@@ -107,10 +109,11 @@ function getDependencies(key) {
   return dependencies;
 }
 
-function togglePermission(dependencies) {
+function togglePermission(dependencies, status) {
+  status = status;
   for (var i = 0; i < dependencies.length; i++) {
-    if (!Permissions[dependencies[i]]) {
-      Permissions[dependencies[i]] = true;
+    if (status != Permissions[dependencies[i]]) {
+      Permissions[dependencies[i]] = status;
     }
   }
   return 'run Permissions toggle';
@@ -121,38 +124,55 @@ let Usecases = makeUsecasesList(ObjA);
 let Permissions = makePermissionsList(ObjA);
 
 function test() {
-  console.log(Permissions);
   console.log(Usecases);
+  console.log(Permissions);
   return;
 }
 test();
 
-const a = document.getElementById('a');
-const b = document.getElementById('b');
-const c = document.getElementById('c');
-const adA = document.getElementById('adA');
-const adB = document.getElementById('adB');
-const adC = document.getElementById('adC');
-
 function toggleHandle(x) {
   if (x === 'p'){
-    alert('p')
+    const permission = event.target.value;
+    const usecases = getUsecases(permission, Usecases);
+    toggleUsecase(usecases);
+    for (var i = 0; i < usecases.length; i++) {
+      $(' :input[value=' + usecases[i] + ']:checked').prop("checked", false);
+    }
+    console.log(Usecases);
   }
   else if (x === 'uc'){
-    alert('uc')
+    const usecase = event.target.value;
+    const permissions = getDependencies(usecase);
+    togglePermission(permissions);
+    for (var i = 0; i < permissions.length; i++) {
+      $(' :input[value=' + permissions[i] + ']').prop("checked", true);
+    }
+    console.log(Permissions);
   }
   return;
 }
 
 function enableP() {
   $("input[type='checkbox']" && "input[id|='p']").prop("checked", true);
+  togglePermission(['a', 'b', 'c'], true);
+  console.log(Permissions);
 }
 function enableUC() {
   $("input[type='checkbox']").prop("checked", true);
+  toggleUsecase(['adA', 'adB', 'adC'], true);
+  togglePermission(['a', 'b', 'c'], true);
+  console.log(Usecases);
+  console.log(Permissions);
 }
 function disableP() {
   $("input[type='checkbox']").prop("checked", false);
+  toggleUsecase(['adA', 'adB', 'adC'], false);
+  togglePermission(['a', 'b', 'c'], false);
+  console.log(Usecases);
+  console.log(Permissions);
 }
 function disableUC() {
   $("input[type='checkbox']" && "input[name*='Advertiser ']").prop("checked", false);
+  toggleUsecase(['adA', 'adB', 'adC'], false);
+  console.log(Usecases);
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Toggle Test</title>
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+  crossorigin="anonymous"></script>
+    <script src="test.js"></script>
+  </head>
+  <body>
+    <h3>Permissions</h3>
+    <form id="Permissions">
+      <div>
+        <button type="button" onclick="disableP();">Disable All</button>
+        <button type="button" onclick="enableP();">Enable All</button>
+      </div>
+      <br/>
+      <div>
+        <input type="checkbox" id="p-age" name="Age" value="a" onclick="toggleHandle('p');">
+        <label for="p-age">Age</label>
+      </div>
+      <div>
+        <input type="checkbox" id="p-gender" name="Gender" value="b" onclick="toggleHandle('p');">
+        <label for="p-gender">Gender</label>
+      </div>
+      <div>
+        <input type="checkbox" id="p-location" name="Location" value="c" onclick="toggleHandle('p');">
+        <label for="p-location">Location</label>
+      </div>
+    </form>
+    <h3>Usecases</h3>
+    <form id="Usecases">
+      <div>
+        <button type="button" onclick="disableUC();">Disable All</button>
+        <button type="button" onclick="enableUC();">Enable All</button>
+      </div>
+      <br/>
+      <div>
+        <input type="checkbox" id="adA" name="Advertiser A" value="adA" onclick="toggleHandle('uc');">
+        <label for="adA">Advertiser A</label>
+      </div>
+      <div>
+        <input type="checkbox" id="adB" name="Advertiser B" value="adB" onclick="toggleHandle('uc');">
+        <label for="adB">Advertiser B</label>
+      </div>
+      <div>
+        <input type="checkbox" id="adC" name="Advertiser C" value="adC" onclick="toggleHandle('uc');">
+        <label for="adC">Advertiser C</label>
+      </div>
+    </form>
+  </body>
+</html>

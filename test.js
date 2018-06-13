@@ -51,21 +51,6 @@ function arrToObj(arr){
 
 // arrToObj = logginator(arrToObj, 'arrToObj');
 
-// function makeDataListA(obj) {
-//   let objCopy = copyObj(obj);
-//   let b = [];
-//   for (let i = 0; i < Object.keys(objCopy).length; i++) {
-//     let key = Object.keys(objCopy)[i];
-//     for (let z = 0; z < objCopy[key].length; z++) {
-//       b.push(objCopy[key][z]);
-//     }
-//   }
-//   b = filterDups(b);
-//   b = arrToObj(b);
-//   console.log(b);
-//   return b;
-// }
-
 function makePermissionsList(obj) {
   let objCopy = copyObj(obj);
   objCopy = [].concat.apply([], Object.values(objCopy));
@@ -104,41 +89,70 @@ function getUsecases(permission, usecases) {
   return caseList;
 }
 
-function getDependencies(key) {
-  let dependencies = [];
-  let values = Usecases[key];
-  values = Array.from(values);
-  values = values.filter(a => typeof a !== "boolean");
-  return values;
+function toggleUsecase(caseList) {
+  for (i = 0; i < caseList.length; i++) {
+    let currentSet = Usecases[caseList[i]];
+    if (currentSet.has(true)) {
+      currentSet.delete(true);
+      currentSet.add(false);
+    }
+  }
+  return 'run Usecases toggle';
 }
+
+function getDependencies(key) {
+  let dependencies = Usecases[key];
+  dependencies = Array.from(dependencies);
+  dependencies = dependencies.filter(a => typeof a !== "boolean");
+  return dependencies;
+}
+
+function togglePermission(dependencies) {
+  for (var i = 0; i < dependencies.length; i++) {
+    if (!Permissions[dependencies[i]]) {
+      Permissions[dependencies[i]] = true;
+    }
+  }
+  return 'run Permissions toggle';
+}
+
 
 let Usecases = makeUsecasesList(ObjA);
 let Permissions = makePermissionsList(ObjA);
 
-function toggleUsecaseDependency(arr) {
-  for (i = 0; i < arr.length; i++) {
-    let currentSet = Usecases[arr[i]];
-    if (currentSet.has(false)) {
-      currentSet.delete(false);
-      currentSet.add(true);
-    }
-  }
-  return 'run toggle';
-}
-
-function togglePermission() {
-
-}
-
-
 function test() {
   console.log(Permissions);
   console.log(Usecases);
-  console.log(getDependencies("adA"));
-  console.log(toggleUsecaseDependency(getUsecases("a", Usecases)));
-  console.log(Usecases);
+  return;
+}
+test();
+
+const a = document.getElementById('a');
+const b = document.getElementById('b');
+const c = document.getElementById('c');
+const adA = document.getElementById('adA');
+const adB = document.getElementById('adB');
+const adC = document.getElementById('adC');
+
+function toggleHandle(x) {
+  if (x === 'p'){
+    alert('p')
+  }
+  else if (x === 'uc'){
+    alert('uc')
+  }
   return;
 }
 
-
-test('end');
+function enableP() {
+  $("input[type='checkbox']" && "input[id|='p']").prop("checked", true);
+}
+function enableUC() {
+  $("input[type='checkbox']").prop("checked", true);
+}
+function disableP() {
+  $("input[type='checkbox']").prop("checked", false);
+}
+function disableUC() {
+  $("input[type='checkbox']" && "input[name*='Advertiser ']").prop("checked", false);
+}

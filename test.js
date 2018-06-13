@@ -85,33 +85,40 @@ function makeUsecasesList(obj) {
   return objCopy;
 }
 
-function checkDependency(dependency, usecase) {
+function checkPermission(permission, usecase) {
   let status = false;
-  if (usecase.has(dependency)) {
+  if (usecase.has(permission)) {
     status = true;
   }
   return status;
 }
 
-function checkUsecases(dependency, usecases) {
-  let status = false;
-  let caseList = [] || undefined;
+// TODO: throw error if requesting unknown permission or usecase
+function getUsecases(permission, usecases) {
+  let caseList = [];
   for (let i = 0; i < Object.keys(usecases).length; i++) {
-    if (checkDependency(dependency, getValue(i, usecases))) {
-      status = true;
+    if (checkPermission(permission, getValue(i, usecases))) {
       caseList.push(getKey(i, usecases));
     }
   }
-  return [status, caseList];
+  return caseList;
+}
+
+function getDependencies(key) {
+  let dependencies = [];
+  let values = Usecases[key];
+  values = Array.from(values);
+  values = values.filter(a => typeof a !== "boolean");
+  return values;
 }
 
 let Usecases = makeUsecasesList(ObjA);
 let Permissions = makePermissionsList(ObjA);
 
-function toggle(status, arr) {
-  if (status) {
-    for (i = 0; i < arr.length; i++) {
-      let currentSet = Usecases[arr[i]];
+function toggleUsecaseDependency(arr) {
+  for (i = 0; i < arr.length; i++) {
+    let currentSet = Usecases[arr[i]];
+    if (currentSet.has(false)) {
       currentSet.delete(false);
       currentSet.add(true);
     }
@@ -119,10 +126,16 @@ function toggle(status, arr) {
   return 'run toggle';
 }
 
+function togglePermission() {
+
+}
+
+
 function test() {
-  // console.log(Permissions);
+  console.log(Permissions);
   console.log(Usecases);
-  console.log(toggle(...checkUsecases("b", Usecases)));
+  console.log(getDependencies("adA"));
+  console.log(toggleUsecaseDependency(getUsecases("a", Usecases)));
   console.log(Usecases);
   return;
 }

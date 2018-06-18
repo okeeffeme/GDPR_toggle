@@ -1,3 +1,5 @@
+import React from 'react';
+
 <Button
   onPress={onPressLearnMore}
   title="Learn More"

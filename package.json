@@ -1,0 +1,28 @@
+{
+  "name": "gdpr-toggle",
+  "version": "1.0.0",
+  "description": "React component for painless display of permissions and use cases",
+  "main": "controller.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 9001 -c .storybook"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okeeffeme/GDPR_toggle.git"
+  },
+  "author": "Megan O'Keeffe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/okeeffeme/GDPR_toggle/issues"
+  },
+  "homepage": "https://github.com/okeeffeme/GDPR_toggle#readme",
+  "devDependencies": {
+    "@storybook/react": "^3.4.7",
+    "babel-core": "^6.26.3"
+  },
+  "dependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  }
+}

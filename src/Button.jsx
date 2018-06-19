@@ -1,10 +1,14 @@
 import React from 'react';
 
-<Button
-  onPress={onPressLearnMore}
-  title="Learn More"
-  color="#841584"
-  accessibilityLabel="Learn more about this purple button"
-/>
+const Button = (props) => (
+ <button
+  onClick={props.onPress}
+  color={props.color || "#841584"}
+  accessibilityLabel={props.accessibilityLabel || "Learn more about this purple button"}
+  >
+  {props.title || "Learn More"}
+ </button>
+);
 
-export default Button
+
+export default Button;

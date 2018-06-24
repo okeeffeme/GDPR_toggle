@@ -5,5 +5,5 @@ import Checkbox from './Checkbox';
 
 storiesOf('Checkbox', module)
   .add('test', () => (
-    <Checkbox  label="Hello" />
+    <Checkbox label="Test Title" description="Test description goes here" />
   ));

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './Checkbox.css';
+
 const divStyle = {
   margin: '40px',
   border: '5px solid pink'
@@ -11,7 +13,7 @@ class Checkbox extends React.Component {
     const props = this.props;
 
     return (
-      <div style={divStyle}>
+      <div className="checkbox" style={divStyle}>
         <input
           type="checkbox"
           id={props.label}

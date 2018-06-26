@@ -1,5 +1,6 @@
 import React from 'react';
 import Checkbox from './Checkbox';
+import './GDPRcontrols.css';
 
 const items = {
   adA: [
@@ -130,24 +131,34 @@ class GDPRcontrols extends React.Component {
     this.Permissions = makePermissionsList(items);
     this.permissionsSet = permissionsSet(items);
     this.usecasesSet = usecasesSet(items);
+    this.permissionsState = permissionsSet(items);
+    this.usecasesState = usecasesSet(items);
   }
 
   controlRules = label => {
-    if (permissionsSet.has(label)) {
-      const usecases = getUsecases(label, this.Usecases);
-      toggleUsecase(usecases);
-    }
-    else if (usecasesSet.has(label)) {
-      const permissions = getDependencies(label);
-      togglePermission(permissions);
-    }
+    console.log('click ' + label);
+
+    // if (permissionsSet.has(label)) {
+    //   const usecases = getUsecases(label, this.Usecases);
+    //   toggleUsecase(usecases);
+    //   console.log(usecases);
+    // }
+    // else if (usecasesSet.has(label)) {
+    //   const permissions = getDependencies(label);
+    //   togglePermission(permissions);
+    //   console.log(permissions);
+    // }
+  }
+
+  handleChange = target => {
+    action('check');
   }
 
 
   createCheckbox = label => (
     <Checkbox
       label={label}
-      handleCheckboxChange={this.controlRules}
+      onClick={() => action('changed checkbox')}
       key={label}
     />
   )
@@ -163,6 +174,7 @@ class GDPRcontrols extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-6">
+            <h2>Permissions</h2>
             <Checkbox
               label='a'
               // handleCheckboxChange={this.controlRules}
@@ -180,7 +192,7 @@ class GDPRcontrols extends React.Component {
             />
           </div>
           <div className="col-sm-6">
-
+            <h2>Usecases</h2>
             <Checkbox
               label='adA'
               // handleCheckboxChange={this.controlRules}

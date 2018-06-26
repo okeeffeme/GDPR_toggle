@@ -1,0 +1,7 @@
+.container {
+  width: 100%;
+}
+.col-sm-6 {
+  width: 50%;
+  float: left;
+}

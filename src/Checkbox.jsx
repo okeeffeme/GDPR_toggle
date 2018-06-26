@@ -3,8 +3,6 @@ import React from 'react';
 import './Checkbox.css';
 
 const divStyle = {
-  margin: '40px',
-  border: '5px solid pink'
 };
 
 class Checkbox extends React.Component {
@@ -19,6 +17,7 @@ class Checkbox extends React.Component {
           id={props.label}
           name={props.label}
           value={props.label}
+          key={props.label}
         />
       <label htmlFor={props.label}>{props.label}</label>
       <p>{props.description}</p>

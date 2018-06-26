@@ -109,38 +109,35 @@ function togglePermission(dependencies, status) {
   return 'run Permissions toggle';
 }
 
-function permissionsList(obj) {
+function permissionsSet(obj) {
   let objCopy = copyObj(obj);
   objCopy = [].concat.apply([], Object.values(objCopy));
   objCopy = filterDups(objCopy);
   return new Set(objCopy);
 }
-function usecasesList(obj) {
+function usecasesSet(obj) {
   let objCopy = copyObj(obj);
   objCopy = [].concat.apply([], Object.keys(objCopy));
   objCopy = filterDups(objCopy);
   return new Set(objCopy);
 }
 
-function logSetElements(value1, value2, set) {
-  console.log('s[' + value1 + '] = ' + value2);
-}
 //////////////////////////////////////////////
 
 class GDPRcontrols extends React.Component {
   componentWillMount = () => {
     this.Usecases = makeUsecasesList(items);
     this.Permissions = makePermissionsList(items);
-    this.permissionsList = permissionsList(items);
-    this.usecasesList = usecasesList(items);
+    this.permissionsSet = permissionsSet(items);
+    this.usecasesSet = usecasesSet(items);
   }
 
   controlRules = label => {
-    if (permissionsList.has(label)) {
+    if (permissionsSet.has(label)) {
       const usecases = getUsecases(label, this.Usecases);
       toggleUsecase(usecases);
     }
-    else if (usecasesList.has(label)) {
+    else if (usecasesSet.has(label)) {
       const permissions = getDependencies(label);
       togglePermission(permissions);
     }
@@ -155,10 +152,11 @@ class GDPRcontrols extends React.Component {
     />
   )
 
-  createCheckboxes = list => (
-    list.forEach(logSetElements)
+  createCheckboxes = list => {
+    list = Array.from(list)
+    list.map(this.createCheckbox);
     //list.forEach(this.createCheckbox)
-  )
+  }
 
   render() {
     return (
@@ -166,12 +164,12 @@ class GDPRcontrols extends React.Component {
         <div className="row">
           <div className="col-sm-6">
 
-            {this.createCheckboxes(permissionsList)}
+            {this.createCheckboxes(permissionsSet)}
 
           </div>
           <div className="col-sm-6">
 
-            {this.createCheckboxes(usecasesList)}
+            {this.createCheckboxes(usecasesSet)}
 
           </div>
         </div>

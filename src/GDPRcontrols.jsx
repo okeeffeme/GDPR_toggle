@@ -163,14 +163,39 @@ class GDPRcontrols extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-6">
-
-            {this.createCheckboxes(permissionsSet)}
-
+            <Checkbox
+              label='a'
+              // handleCheckboxChange={this.controlRules}
+              key='a'
+            />
+            <Checkbox
+              label='b'
+              // handleCheckboxChange={this.controlRules}
+              key='b'
+            />
+            <Checkbox
+              label='c'
+              // handleCheckboxChange={this.controlRules}
+              key='c'
+            />
           </div>
           <div className="col-sm-6">
 
-            {this.createCheckboxes(usecasesSet)}
-
+            <Checkbox
+              label='adA'
+              // handleCheckboxChange={this.controlRules}
+              key='adA'
+            />
+            <Checkbox
+              label='adB'
+              // handleCheckboxChange={this.controlRules}
+              key='adB'
+            />
+            <Checkbox
+              label='adC'
+              // handleCheckboxChange={this.controlRules}
+              key='adC'
+            />
           </div>
         </div>
       </div>

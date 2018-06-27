@@ -15,6 +15,7 @@ class Checkbox extends React.Component {
         <input
           type="checkbox"
           id={props.label}
+          onClick={props.clickHandler}
           name={props.label}
           value={props.label}
           key={props.label}

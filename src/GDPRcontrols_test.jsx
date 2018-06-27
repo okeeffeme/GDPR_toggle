@@ -11,13 +11,16 @@ class GDPRcontrols extends React.Component {
   componentWillMount = () => {
     this.selectedCheckboxes = new Set();
   }
-  toggleCheckbox = label => {
-    if (this.selectedCheckboxes.has(label)) {
-      this.selectedCheckboxes.delete(label);
-    } else {
-      this.selectedCheckboxes.add(label);
-    }
+  toggleCheckbox = () => {
+    console.log('action');
   }
+  // toggleCheckbox = label => {
+  //   if (this.selectedCheckboxes.has(label)) {
+  //     this.selectedCheckboxes.delete(label);
+  //   } else {
+  //     this.selectedCheckboxes.add(label);
+  //   }
+  // }
   handleFormSubmit = formSubmitEvent => {
     formSubmitEvent.preventDefault();
 
@@ -29,7 +32,8 @@ class GDPRcontrols extends React.Component {
   createCheckbox = label => (
     <Checkbox
       label={label}
-      handleCheckboxChange={this.toggleCheckbox}
+      onClick={this.toggleCheckbox}
+      // handleCheckboxChange={this.toggleCheckbox}
       key={label}
     />
   )

@@ -18,7 +18,7 @@ class Checkbox extends React.Component {
           onClick={props.onClick}
           name={props.label}
           value={props.label}
-          key={props.key}
+          key={props.label}
         />
       <label htmlFor={props.label}>{props.label}</label>
       <p>{props.description}</p>

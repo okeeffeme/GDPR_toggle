@@ -15,10 +15,10 @@ class Checkbox extends React.Component {
         <input
           type="checkbox"
           id={props.label}
-          onClick={props.clickHandler}
+          onClick={props.onClick}
           name={props.label}
           value={props.label}
-          key={props.label}
+          key={props.key}
         />
       <label htmlFor={props.label}>{props.label}</label>
       <p>{props.description}</p>

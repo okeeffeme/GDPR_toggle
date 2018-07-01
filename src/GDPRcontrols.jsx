@@ -26,28 +26,15 @@ function getKey(i, obj) {
   return Object.keys(obj)[i];
 }
 
+function getValue(i, obj){
+  return obj[getKey(i, obj)];
+}
+
 function filterDups(arr){
     let uniqueArray = arr.filter(function(elem, index, self) {
         return index == self.indexOf(elem);
     });
     return uniqueArray
-}
-
-function arrToObj(arr){
-  let obj = {};
-  let value = false;
-  for (let i = 0; i < arr.length; i++) {
-    obj[arr[i]] = value;
-  }
-  return obj;
-}
-
-function makePermissionsList(obj) {
-  let objCopy = copyObj(obj);
-  objCopy = [].concat.apply([], Object.values(objCopy));
-  objCopy = filterDups(objCopy);
-  objCopy = arrToObj(objCopy);
-  return objCopy;
 }
 
 function makeUsecasesList(obj) {
@@ -56,7 +43,6 @@ function makeUsecasesList(obj) {
     let key = Object.keys(objCopy)[i];
     let values = Object.values(objCopy[key]);
     objCopy[key] = new Set(values);
-    objCopy[key].add(false);
   }
   return objCopy;
 }
@@ -80,21 +66,22 @@ function getUsecases(permission, usecases) {
   return caseList;
 }
 
-function toggleUsecase(caseList, status) {
+function toggleUsecase(caseList, usecases, status) {
   status = status || false;
   console.log('usecase status is ' + status);
-  for (i = 0; i < caseList.length; i++) {
-    let currentSet = Usecases[caseList[i]];
+  for (let i = 0; i < caseList.length; i++) {
+    let currentSet = usecases[caseList[i]];
     if (currentSet.has(!status)) {
       currentSet.delete(!status);
       currentSet.add(status);
+      console.log('usecase status is now ' + status);
     }
   }
   return 'run Usecases toggle';
 }
 
-function getDependencies(key) {
-  let dependencies = Usecases[key];
+function getDependencies(usecases, key) {
+  let dependencies = usecases[key];
   dependencies = Array.from(dependencies);
   dependencies = dependencies.filter(a => typeof a !== "boolean");
   return dependencies;
@@ -102,7 +89,7 @@ function getDependencies(key) {
 
 function togglePermission(dependencies, status) {
   status = status;
-  for (var i = 0; i < dependencies.length; i++) {
+  for (let i = 0; i < dependencies.length; i++) {
     if (status != Permissions[dependencies[i]]) {
       Permissions[dependencies[i]] = status;
     }
@@ -110,13 +97,13 @@ function togglePermission(dependencies, status) {
   return 'run Permissions toggle';
 }
 
-function permissionsSet(obj) {
+function makePermissionsSet(obj) {
   let objCopy = copyObj(obj);
   objCopy = [].concat.apply([], Object.values(objCopy));
   objCopy = filterDups(objCopy);
   return new Set(objCopy);
 }
-function usecasesSet(obj) {
+function makeUsecasesSet(obj) {
   let objCopy = copyObj(obj);
   objCopy = [].concat.apply([], Object.keys(objCopy));
   objCopy = filterDups(objCopy);
@@ -128,86 +115,67 @@ function usecasesSet(obj) {
 class GDPRcontrols extends React.Component {
   componentWillMount = () => {
     this.Usecases = makeUsecasesList(items);
-    this.Permissions = makePermissionsList(items);
-    this.permissionsSet = permissionsSet(items);
-    this.usecasesSet = usecasesSet(items);
-    this.permissionsState = permissionsSet(items);
-    this.usecasesState = usecasesSet(items);
+    this.Permissions = Array.from(makePermissionsSet(items));
+    this.permissionsSet = makePermissionsSet(items);
+    this.usecasesSet = makeUsecasesSet(items);
+    this.permissionsState = makePermissionsSet(items);
+    this.usecasesState = makeUsecasesSet(items);
   }
 
   controlRules = label => {
-    console.log('click ' + label);
+    console.log('click ');
+    let permissionsSet = makePermissionsSet(items);
+    let usecasesSet = makeUsecasesSet(items);
 
-    // if (permissionsSet.has(label)) {
-    //   const usecases = getUsecases(label, this.Usecases);
-    //   toggleUsecase(usecases);
-    //   console.log(usecases);
-    // }
-    // else if (usecasesSet.has(label)) {
-    //   const permissions = getDependencies(label);
-    //   togglePermission(permissions);
-    //   console.log(permissions);
-    // }
+    if (permissionsSet.has(label)) {
+      const usecases = getUsecases(label, this.Usecases);
+      toggleUsecase(usecases, this.Usecases );
+      console.log('Used in ' + usecases);
+      console.log(this.Usecases);
+    }
+    else if (usecasesSet.has(label)) {
+      const permissions = getDependencies(this.Usecases, label);
+      togglePermission(permissions);
+      console.log('Requires ' + permissions);
+      console.log(this.Permissions);
+    }
   }
-
-  handleChange = target => {
-    action('check');
-  }
-
 
   createCheckbox = label => (
     <Checkbox
       label={label}
-      onClick={() => action('changed checkbox')}
+      onClick={() => this.controlRules(label)}
       key={label}
     />
   )
 
-  createCheckboxes = list => {
-    list = Array.from(list)
-    list.map(this.createCheckbox);
-    //list.forEach(this.createCheckbox)
-  }
+  createCheckboxes = list => Array.from(list).map(this.createCheckbox);
+
+  // createCheckboxes = list => {
+  //   list = Array.from(list)
+  //   return list.map(this.createCheckbox);
+  // }
 
   render() {
+    const { createCheckboxes, Permissions, Usecases } = this;
+
+    const permissionsCheckboxes = createCheckboxes(Permissions);
+    const usecasesCheckboxes = createCheckboxes(Object.keys(Usecases));
+
     return (
       <div className="container">
         <div className="row">
           <div className="col-sm-6">
+
             <h2>Permissions</h2>
-            <Checkbox
-              label='a'
-              // handleCheckboxChange={this.controlRules}
-              key='a'
-            />
-            <Checkbox
-              label='b'
-              // handleCheckboxChange={this.controlRules}
-              key='b'
-            />
-            <Checkbox
-              label='c'
-              // handleCheckboxChange={this.controlRules}
-              key='c'
-            />
+            {permissionsCheckboxes}
+
           </div>
           <div className="col-sm-6">
+
             <h2>Usecases</h2>
-            <Checkbox
-              label='adA'
-              // handleCheckboxChange={this.controlRules}
-              key='adA'
-            />
-            <Checkbox
-              label='adB'
-              // handleCheckboxChange={this.controlRules}
-              key='adB'
-            />
-            <Checkbox
-              label='adC'
-              // handleCheckboxChange={this.controlRules}
-              key='adC'
-            />
+            {usecasesCheckboxes}
+
           </div>
         </div>
       </div>

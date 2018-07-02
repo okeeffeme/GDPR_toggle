@@ -134,18 +134,20 @@ class GDPRcontrols extends React.Component {
     console.log('click ');
     let permissionsSet = makePermissionsSet(items);
     let usecasesSet = makeUsecasesSet(items);
-// PERMISSIONS
     if (permissionsSet.has(label)) {
       const usecases = getUsecases(label, this.Usecases);
-      for(let i = 0;i<usecases.length;i++){
-        this.toggleCheckbox(usecases[i]);
+      if(this.enabled.has(label)){
+        this.toggleCheckbox(label);
+        for(let i = 0;i<usecases.length;i++){
+          if (this.enabled.has(usecases[i])){
+            this.toggleCheckbox(usecases[i]);
+          }
+        }
+      } else {
+        this.toggleCheckbox(label);
       }
-      this.toggleCheckbox(label);
-      // toggleUsecase(usecases, this.Usecases);
-      console.log('Used in ' + usecases);
       console.log(this.enabled);
     }
-// USECASES
     else if (usecasesSet.has(label)) {
       const permissions = getDependencies(this.Usecases, label);
       if (this.enabled.has(label)){
@@ -181,7 +183,6 @@ class GDPRcontrols extends React.Component {
 
   render() {
     const { createCheckboxes, Permissions, Usecases } = this;
-
     const permissionsCheckboxes = createCheckboxes(Permissions);
     const usecasesCheckboxes = createCheckboxes(Object.keys(Usecases));
 

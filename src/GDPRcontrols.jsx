@@ -118,26 +118,49 @@ class GDPRcontrols extends React.Component {
     this.Permissions = Array.from(makePermissionsSet(items));
     this.permissionsSet = makePermissionsSet(items);
     this.usecasesSet = makeUsecasesSet(items);
-    this.permissionsState = makePermissionsSet(items);
-    this.usecasesState = makeUsecasesSet(items);
+    this.enabled = new Set;
+    // this.disabled = new Set([...makePermissionsSet(items), ...makeUsecasesSet(items)]);
+  }
+
+  toggleCheckbox = label => {
+    if (this.enabled.has(label)) {
+      this.enabled.delete(label);
+    } else {
+      this.enabled.add(label);
+    }
   }
 
   controlRules = label => {
     console.log('click ');
     let permissionsSet = makePermissionsSet(items);
     let usecasesSet = makeUsecasesSet(items);
-
+// PERMISSIONS
     if (permissionsSet.has(label)) {
       const usecases = getUsecases(label, this.Usecases);
-      toggleUsecase(usecases, this.Usecases );
+      for(let i = 0;i<usecases.length;i++){
+        this.toggleCheckbox(usecases[i]);
+      }
+      this.toggleCheckbox(label);
+      // toggleUsecase(usecases, this.Usecases);
       console.log('Used in ' + usecases);
-      console.log(this.Usecases);
+      console.log(this.enabled);
     }
+// USECASES
     else if (usecasesSet.has(label)) {
       const permissions = getDependencies(this.Usecases, label);
-      togglePermission(permissions);
+      if (this.enabled.has(label)){
+        this.toggleCheckbox(label);
+      } else {
+        this.toggleCheckbox(label);
+        for(let i = 0;i<permissions.length;i++){
+          if(!this.enabled.has(permissions[i])){
+            this.toggleCheckbox(permissions[i]);
+          }
+        }
+      }
+      // togglePermission(permissions);
       console.log('Requires ' + permissions);
-      console.log(this.Permissions);
+      console.log(this.enabled);
     }
   }
 

@@ -1,7 +1,7 @@
-class StatelessCheckbox extends React.Component {
-  constructor() {
+import React from 'react';
 
-  }
+class StatelessCheckbox extends React.Component {
+
   render(){
     const {checked,label,onClick} = this.props;
 
@@ -26,7 +26,7 @@ class StatefulCheckboxGroup extends React.Component {
     const isChecked = checked.includes(label);
 
     if(isChecked) {
-      newChecked = checked.filter((1) => 1 !== label);
+      newChecked = checked.filter((l) => l !== label);
     } else {
       newChecked = [...checked];
       newChecked.push(label);
@@ -50,7 +50,7 @@ class StatefulCheckboxGroup extends React.Component {
   }
 
   render() {
-    const {labels} = this.this.props;
+    const {labels} = this.props;
     const {renderCheckbox} = this;
     const checkboxes = labels.map(renderCheckbox);
 
@@ -74,7 +74,4 @@ class Page extends React.Component {
   }
 }
 
-ReactDOM.render(
-  (<Page />),
-  document.body
-);
+export default Page;

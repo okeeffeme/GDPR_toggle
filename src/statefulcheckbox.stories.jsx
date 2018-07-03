@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import StatefulCheckboxGroup from './statefulcheckbox';
 
-storiesOf('GDPRcontrols', module)
+storiesOf('StatefulCheckboxGroup', module)
   .add('test', () => (
     <StatefulCheckboxGroup />
   ));

@@ -66,7 +66,7 @@ function getUsecases(permission, usecases) {
   return caseList;
 }
 
-function toggleUsecase(caseList, usecases, status) {
+function old_toggleUsecase(caseList, usecases, status) {
   status = status || false;
   console.log('usecase status is ' + status);
   for (let i = 0; i < caseList.length; i++) {
@@ -87,7 +87,7 @@ function getDependencies(usecases, key) {
   return dependencies;
 }
 
-function togglePermission(dependencies, status) {
+function old_togglePermission(dependencies, status) {
   status = status;
   for (let i = 0; i < dependencies.length; i++) {
     if (status != Permissions[dependencies[i]]) {
@@ -112,64 +112,84 @@ function makeUsecasesSet(obj) {
 
 //////////////////////////////////////////////
 
+
 class GDPRcontrols extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.state.enabled = new Set(['a','b']);
+  }
+
   componentWillMount = () => {
     this.Usecases = makeUsecasesList(items);
     this.Permissions = Array.from(makePermissionsSet(items));
     this.permissionsSet = makePermissionsSet(items);
     this.usecasesSet = makeUsecasesSet(items);
-    this.enabled = new Set;
-    // this.disabled = new Set([...makePermissionsSet(items), ...makeUsecasesSet(items)]);
   }
 
   toggleCheckbox = label => {
-    if (this.enabled.has(label)) {
-      this.enabled.delete(label);
+    if (this.state.enabled.has(label)) {
+      this.setState(this.state.enabled.delete(label));
     } else {
-      this.enabled.add(label);
+      this.setState(this.state.enabled.add(label));
     }
   }
 
   controlRules = label => {
-    console.log('click ');
+    console.log('controlRules');
     let permissionsSet = makePermissionsSet(items);
     let usecasesSet = makeUsecasesSet(items);
     if (permissionsSet.has(label)) {
-      const usecases = getUsecases(label, this.Usecases);
-      if(this.enabled.has(label)){
-        this.toggleCheckbox(label);
-        for(let i = 0;i<usecases.length;i++){
-          if (this.enabled.has(usecases[i])){
-            this.toggleCheckbox(usecases[i]);
-          }
-        }
-      } else {
-        this.toggleCheckbox(label);
-      }
+      this.togglePermission(label);
       console.log(this.enabled);
     }
     else if (usecasesSet.has(label)) {
-      const permissions = getDependencies(this.Usecases, label);
-      if (this.enabled.has(label)){
-        this.toggleCheckbox(label);
-      } else {
-        this.toggleCheckbox(label);
-        for(let i = 0;i<permissions.length;i++){
-          if(!this.enabled.has(permissions[i])){
-            this.toggleCheckbox(permissions[i]);
-          }
-        }
-      }
+      this.toggleUsecase(label);
       // togglePermission(permissions);
-      console.log('Requires ' + permissions);
+      // console.log('Requires ' + permissions);
       console.log(this.enabled);
     }
+  }
+
+  togglePermission = label => {
+    const usecases = getUsecases(label, this.Usecases);
+    if(this.state.enabled.has(label)){
+      this.toggleCheckbox(label);
+      for(let i = 0;i<usecases.length;i++){
+        if (this.state.enabled.has(usecases[i])){
+          this.toggleCheckbox(usecases[i]);
+        }
+      }
+    } else {
+      this.toggleCheckbox(label);
+    }
+  }
+
+  toggleUsecase = label => {
+    const permissions = getDependencies(this.Usecases, label);
+    if (this.state.enabled.has(label)){
+      this.toggleCheckbox(label);
+    } else {
+      this.toggleCheckbox(label);
+      for(let i = 0;i<permissions.length;i++){
+        if(!this.state.enabled.has(permissions[i])){
+          this.toggleCheckbox(permissions[i]);
+        }
+      }
+    }
+  }
+
+  controlDriver = label => {
+    console.log('controlDriver');
+    return this.state.enabled.has(label);
   }
 
   createCheckbox = label => (
     <Checkbox
       label={label}
       onClick={() => this.controlRules(label)}
+      onChange={() => this.controlDriver(label)}
+      checked={() => this.state}
       key={label}
     />
   )

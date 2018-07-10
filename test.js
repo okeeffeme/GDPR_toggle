@@ -56,7 +56,15 @@ function makePermissionsList(obj) {
   objCopy = [].concat.apply([], Object.values(objCopy));
   objCopy = filterDups(objCopy);
   objCopy = arrToObj(objCopy);
+  console.log(objCopy);
   return objCopy;
+}
+
+function permissionsList(obj) {
+  let objCopy = copyObj(obj);
+  objCopy = [].concat.apply([], Object.values(objCopy));
+  objCopy = filterDups(objCopy);
+  return new Set(objCopy);
 }
 
 function makeUsecasesList(obj) {
@@ -68,6 +76,12 @@ function makeUsecasesList(obj) {
     objCopy[key].add(false);
   }
   return objCopy;
+}
+function usecasesList(obj) {
+  let objCopy = copyObj(obj);
+  objCopy = [].concat.apply([], Object.keys(objCopy));
+  objCopy = filterDups(objCopy);
+  return new Set(objCopy);
 }
 
 function checkPermission(permission, usecase) {
@@ -122,10 +136,14 @@ function togglePermission(dependencies, status) {
 
 let Usecases = makeUsecasesList(ObjA);
 let Permissions = makePermissionsList(ObjA);
+let varPermissionsList = permissionsList(ObjA);
+let varUsecasesList = usecasesList(ObjA);
 
 function test() {
   console.log(Usecases);
   console.log(Permissions);
+  console.log(varPermissionsList);
+  console.log(varUsecasesList);
   return;
 }
 test();

@@ -1,0 +1,8 @@
+
+.checkbox {
+  margin: 1em;
+  /* border: '5px solid pink' */
+}
+.checkbox label {
+  font-weight: bold;
+}
